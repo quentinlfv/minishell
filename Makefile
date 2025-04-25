@@ -3,9 +3,12 @@ CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra
 
 SRC_PATH = ./src/
+LEX_PATH
 OBJ_PATH = obj/
 
-SRC		= readline.c \
+SRC		= src/readline.c \
+			src/lexer/lexer.c \
+			src/lexer/lexer_utils.c \
 
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJ			= $(SRC:.c=.o)

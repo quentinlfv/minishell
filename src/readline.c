@@ -30,6 +30,7 @@ int	main(void)
 	{
 		printf("%s\n", rl);
 		add_history(rl);
+		start_lexer(rl);
 	}
 	free(rl);
 	return (0);
