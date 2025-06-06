@@ -8,20 +8,33 @@ t_lexer *new_word_token(t_lexer lexer, char cmd, int *i)
 	while (ft_isalnum(cmd[*i]) && cmd[*i])
 		(*i)++;
 	if (start != *i)
-		ft_lexadd_back(&lexer, ft_lexnew(ft_substr(cmd_line, start, *i - start), WORD));
+		lex_add_back(&lexer, ft_lexnew(ft_substr(cmd_line, start, *i - start), WORD));
 	return (tmp);
 }
 
 t_lexer *token_recognition(char *cmd_line)
 {
 	t_lexer *lexer;
-	int	i;
+	int	start;
+	int	current;
 
 	lexer = NULL;
-	i = 0;
-	while (cmd_line[i])
+	current = 0;
+	start = current;
+	while (cmd_line[current])
 	{
-		lexer = new_word_token(lexer, cmd_line, &i)
+		if (ft_is_space(cmd_line[current]))
+		{
+			lex_add_back(&lexer, lex_new(ft_substr(cmd_line, start, current - start), WORD));
+			start = current + 1;	
+		}
+		else if (ft_is_symbol(cmd_line[current]))
+		{
+			lex_add_back(&lexer, lex_new(ft_substr(cmd_line, start, current - start), OPERATOR));
+			start = current + 1;
+		}
+		else if (cmd_line[current] == '\0')
+			lex_add_back(&lexer, lex_new(ft_substr(cmd_line, start, current - start), WORD));
 	}
 	return (lexer);
 }

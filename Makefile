@@ -3,7 +3,7 @@ CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra
 
 SRC_PATH = ./src/
-LEX_PATH
+
 OBJ_PATH = obj/
 
 SRC		= src/readline.c \
