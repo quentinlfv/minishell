@@ -1,6 +1,6 @@
 #include <minishell.h>
 
-t_lexer	*lex_new(void *content, t_token type)
+t_lexer	*new_token(char *content, t_token type)
 {
 	t_lexer	*lexer;
 
@@ -23,7 +23,7 @@ t_lexer	*lex_last(t_lexer *lst)
 	return (lst);
 }
 
-void	lex_add_back(t_lexer **lst, t_lexer *new)
+void	add_token(t_lexer **lst, t_lexer *new)
 {
 	t_lexer	*tmp;
 
@@ -31,7 +31,7 @@ void	lex_add_back(t_lexer **lst, t_lexer *new)
 		(*lst) = new;
 	else
 	{
-		tmp = ft_lstlast(*lst);
+		tmp = lex_last(*lst);
 		tmp->next = new;
 	}
 }
@@ -43,7 +43,7 @@ void	print_lex(t_lexer *lexer)
 	tmp = lexer;
 	while (lexer-> != NULL)
 	{
-		printf("content = %s\n", lexer->content);
+		printf("content = %s | token = %d\n", lexer->content, lexer->token);
 		lexer = lexer->next;
 	}
 }

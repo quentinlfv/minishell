@@ -5,14 +5,14 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "libft.h"
 
 typedef enum e_token
 {
 	WORD,
 	PIPE,
-	NEWLINE,
-	DLESS, // <<
-	DGREAT, // >>
+	D_LESS, // <<
+	D_GREAT, // >>
 	LESS, // <
 	GREAT, // >
 } t_token;
@@ -20,14 +20,20 @@ typedef enum e_token
 typedef struct s_lexer
 {
 	char 		*content;
-	struct t_token token;
-	struct *t_lexer next;
-	struct *t_lexer prev;
+	t_token 	token;
+	struct t_lexer *next;
+	struct t_lexer *prev;
 } t_lexer;
 
 
 /* lexer */
-t_lexer	*ft_lexnew(void *content, t_token type);
-void	ft_lexadd_back(t_lexer **lst, t_lexer *new);
+void	new_ope_token(t_lexer **lexer, char **cmd);
+void	new_word_token(t_lexer **lexer, char **cmd);
+t_lexer *token_recognition(char *cmd);
+t_lexer *start_lexer(char *cmd_line);
+t_lexer	*new_token(void *content, t_token type);
+t_lexer	*lex_last(t_lexer *lst);
+void	add_token(t_lexer **lst, t_lexer *new);
+void	print_lex(t_lexer *lexer);
 
 # endif

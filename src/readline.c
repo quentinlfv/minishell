@@ -23,6 +23,7 @@ char *getmyline(void)
 
 int	main(void)
 {
+	t_lexer *lexer;
 	char *rl;
 
 	rl = NULL;	
@@ -30,7 +31,8 @@ int	main(void)
 	{
 		printf("%s\n", rl);
 		add_history(rl);
-		start_lexer(rl);
+		lexer = start_lexer(rl);
+		print_lex(lexer);
 	}
 	free(rl);
 	return (0);

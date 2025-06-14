@@ -1,40 +1,64 @@
 #include <minishell.h>
 
-t_lexer *new_word_token(t_lexer lexer, char cmd, int *i)
+void	new_ope_token(t_lexer **lexer, char **cmd)
 {
-	int		start;
-
-	start = i;
-	while (ft_isalnum(cmd[*i]) && cmd[*i])
-		(*i)++;
-	if (start != *i)
-		lex_add_back(&lexer, ft_lexnew(ft_substr(cmd_line, start, *i - start), WORD));
-	return (tmp);
+	if (**cmd == '>')
+	{
+		if (**cmd + 1 == '>')
+		{
+			add_token(lexer, new_token(">>", D_GREAT));
+			(*cmd)++;
+		}
+		else
+			add_token(lexer, new_token(">", GREAT));
+	}
+	else if (**cmd == '<')
+	{
+		if (**cmd + 1 == '<')
+		{
+			add_token(lexer, new_token("<<", D_LESS));
+			(*cmd)++;
+		}
+		else
+			add_token(lexer, new_token("<", LESS));
+	}
+	else if (**cmd == '|')
+		add_token(lexer, new_token("|", PIPE));
+	(*cmd)++;
 }
 
-t_lexer *token_recognition(char *cmd_line)
+void	new_word_token(t_lexer **lexer, char **cmd)
+{
+	int		quote;
+	int		idx;
+
+	quote = 0;
+	idx = 0;
+	while (ft_strchr(" \t\n<>|", *cmd[idx]))
+	{
+		if (quote == 0 && ft_strchr("'\"", *cmd[idx]))
+			quote = *cmd[idx];
+		else if (quote != 0 && quote == *cmd[idx])
+			quote = 0;
+		idx++;
+	}
+	add_token(lexer, new_token(ft_substr(*cmd, 0, idx), WORD));
+	(*cmd) = (*cmd) + idx;
+}
+
+t_lexer *token_recognition(char *cmd)
 {
 	t_lexer *lexer;
-	int	start;
-	int	current;
 
 	lexer = NULL;
-	current = 0;
-	start = current;
-	while (cmd_line[current])
+	while (*cmd)
 	{
-		if (ft_is_space(cmd_line[current]))
-		{
-			lex_add_back(&lexer, lex_new(ft_substr(cmd_line, start, current - start), WORD));
-			start = current + 1;	
-		}
-		else if (ft_is_symbol(cmd_line[current]))
-		{
-			lex_add_back(&lexer, lex_new(ft_substr(cmd_line, start, current - start), OPERATOR));
-			start = current + 1;
-		}
-		else if (cmd_line[current] == '\0')
-			lex_add_back(&lexer, lex_new(ft_substr(cmd_line, start, current - start), WORD));
+		while (ft_strchr(" \t\n", *cmd) && *cmd)
+			cmd++;
+		if (ft_strchr("<>|", *cmd))
+			new_ope_token(&lexer, &cmd);
+		else
+			new_word_token(&lexer, &cmd);
 	}
 	return (lexer);
 }

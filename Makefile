@@ -15,10 +15,8 @@ OBJ			= $(SRC:.c=.o)
 OBJS		= $(addprefix $(OBJ_PATH), $(OBJ))
 INCS		= -I ./inc/
 
-
 LIBDIR = ./libft/
 LIBFT = ./libft/libft.a
-
 
 RM 			:= rm -rf
 MAKEFLAGS	+= --no-print-directory
@@ -42,6 +40,7 @@ clean:
 
 fclean: clean
 		$(RM) $(NAME) 
+
 re: 
 		$(MAKE) fclean
 		$(MAKE) all
