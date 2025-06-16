@@ -6,9 +6,9 @@ SRC_PATH = ./src/
 
 OBJ_PATH = obj/
 
-SRC		= src/readline.c \
-			src/lexer/lexer.c \
-			src/lexer/lexer_utils.c \
+SRC		= readline.c \
+			lexer/lexer.c \
+			lexer/lexer_utils.c \
 
 SRCS		= $(addprefix $(SRC_PATH), $(SRC))
 OBJ			= $(SRC:.c=.o)
@@ -27,7 +27,8 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 		$(CC) $(CFLAGS) -I$(LIBDIR) -c $< -o $@ $(INCS)
 
 $(OBJ_PATH):
-		mkdir obj -p
+		mkdir -p obj 
+		mkdir -p obj/lexer
 
 $(NAME): $(OBJ_PATH) $(OBJS)
 		$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline

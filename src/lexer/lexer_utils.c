@@ -5,7 +5,7 @@ t_lexer	*new_token(char *content, t_token type)
 	t_lexer	*lexer;
 
 	lexer = malloc(sizeof(t_lexer));
-	if (!list)
+	if (!lexer)
 		return (NULL);
 	lexer->content = content;
 	lexer->token = type;
@@ -41,9 +41,9 @@ void	print_lex(t_lexer *lexer)
 	t_lexer *tmp;
 
 	tmp = lexer;
-	while (lexer-> != NULL)
+	while (tmp)
 	{
-		printf("content = %s | token = %d\n", lexer->content, lexer->token);
-		lexer = lexer->next;
+		printf("content = %s/// token = %d\n", tmp->content, tmp->token);
+		tmp = tmp->next;
 	}
 }

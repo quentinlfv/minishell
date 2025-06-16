@@ -4,7 +4,7 @@ void	new_ope_token(t_lexer **lexer, char **cmd)
 {
 	if (**cmd == '>')
 	{
-		if (**cmd + 1 == '>')
+		if (*(*cmd + 1) == '>')
 		{
 			add_token(lexer, new_token(">>", D_GREAT));
 			(*cmd)++;
@@ -14,7 +14,7 @@ void	new_ope_token(t_lexer **lexer, char **cmd)
 	}
 	else if (**cmd == '<')
 	{
-		if (**cmd + 1 == '<')
+		if (*(*cmd + 1) == '<')
 		{
 			add_token(lexer, new_token("<<", D_LESS));
 			(*cmd)++;
@@ -34,11 +34,11 @@ void	new_word_token(t_lexer **lexer, char **cmd)
 
 	quote = 0;
 	idx = 0;
-	while (ft_strchr(" \t\n<>|", *cmd[idx]))
+	while (((*cmd)[idx] && ft_strchr(" \t\n<>|", (*cmd)[idx]) == NULL) || quote != 0)
 	{
-		if (quote == 0 && ft_strchr("'\"", *cmd[idx]))
-			quote = *cmd[idx];
-		else if (quote != 0 && quote == *cmd[idx])
+		if (quote == 0 && ft_strchr("'\"", (*cmd)[idx]) != NULL)
+			quote = (*cmd)[idx];
+		else if (quote != 0 && quote == (*cmd)[idx])
 			quote = 0;
 		idx++;
 	}
