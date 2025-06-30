@@ -7,6 +7,7 @@ SRC_PATH = ./src/
 OBJ_PATH = obj/
 
 SRC		= readline.c \
+			parser.c \
 			lexer/lexer.c \
 			lexer/lexer_utils.c \
 

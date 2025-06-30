@@ -26,6 +26,32 @@ typedef struct s_lexer
 } t_lexer;
 
 
+typedef enum e_node_type {
+	NODE_COMMAND,
+	NODE_PIPE,
+	NODE_REDIRECT
+} t_node_type;
+
+typedef struct s_ast {
+	t_node_type type;
+	union {
+		struct {
+			char **args;
+		} cmd;
+		struct {
+			struct s_ast *left;
+			struct s_ast *right;
+		} pipe;
+		struct {
+			struct s_ast *command;
+			char *filename;
+			t_token redirect_type;
+		} redirect;
+	};
+} t_ast;
+
+
+
 /* lexer */
 void	new_ope_token(t_lexer **lexer, char **cmd);
 void	new_word_token(t_lexer **lexer, char **cmd);
@@ -36,4 +62,11 @@ t_lexer	*lex_last(t_lexer *lst);
 void	add_token(t_lexer **lst, t_lexer *new);
 void	print_lex(t_lexer *lexer);
 
+
+void advance(t_lexer **lexer);
+char **parse_args(t_lexer **lexer);
+t_ast *parse_pipeline(t_lexer **lexer);
+t_ast *parse_redirects(t_lexer **lexer);
+t_ast *parse(t_lexer **tokens);
+void print_ast(t_ast *ast, int depth);
 # endif
