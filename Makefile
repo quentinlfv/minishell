@@ -8,7 +8,9 @@ SRC = readline.c \
       read_line_utils.c \
       read_line_utils2.c \
       heredoc.c \
+      heredoc_utils.c \
       signals.c \
+      signal_utils.c \
       builtins.c \
       env.c \
       expand.c \

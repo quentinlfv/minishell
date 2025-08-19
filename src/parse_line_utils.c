@@ -82,36 +82,36 @@ t_ast	*parse(t_lexer **tokens)
 // 	return (1);
 // }
 
+int	fill_cmd_node_command(t_ast *node, t_cmd *cmd)
+{
+	int	len;
+	int	i;
+
+	len = 0;
+	while (node->cmd.args && node->cmd.args[len])
+		len++;
+	cmd->args = malloc(sizeof(char *) * (len + 1));
+	if (!cmd->args)
+		return (0);
+	i = -1;
+	while (++i < len)
+		cmd->args[i] = ft_strdup(node->cmd.args[i]);
+	cmd->args[len] = NULL;
+	return (1);
+}
 
 int	fill_cmd(t_ast *node, t_cmd *cmd)
 {
 	if (!node || !cmd)
 		return (0);
-
 	if (node->type == NODE_REDIRECT)
 	{
-		// Si commande présente, la remplir d'abord
 		if (node->redirect.command)
-		{
 			if (!fill_cmd(node->redirect.command, cmd))
 				return (0);
-		}
-		// Puis appliquer la redirection
-		apply_redirect(cmd, node);
-		return (1);
+		return (apply_redirect(cmd, node), 1);
 	}
 	else if (node->type == NODE_COMMAND)
-	{
-		int len = 0;
-		while (node->cmd.args && node->cmd.args[len])
-			len++;
-		cmd->args = malloc(sizeof(char *) * (len + 1));
-		if (!cmd->args)
-			return (0);
-		for (int i = 0; i < len; i++)
-			cmd->args[i] = ft_strdup(node->cmd.args[i]);
-		cmd->args[len] = NULL;
-		return (1);
-	}
+		return (fill_cmd_node_command(node, cmd));
 	return (1);
 }

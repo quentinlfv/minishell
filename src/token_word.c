@@ -50,6 +50,8 @@ void	*free_cmd(t_cmd *cmd)
 	t_cmd	*tmp;
 	int		i;
 
+	if (!cmd)
+		return (NULL);
 	while (cmd)
 	{
 		tmp = cmd->next;

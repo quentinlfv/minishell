@@ -54,7 +54,9 @@ void	make_heredoc_in_out_file_utils(t_cmd *cmd, t_sig *sig)
 		sig->sigquit = open(cmd->outfile, flags, 0644);
 		if (sig->sigquit == -1)
 		{
-			printf("ERROR: FILE\n");
+			printf("ERROR: FILEEEE\n");
+			cmd->link->cmds = cmd;
+			free_link_struct(*cmd->link);
 			exit(EXIT_FAILURE);
 		}
 		dup2(sig->sigquit, STDOUT_FILENO);
@@ -77,6 +79,8 @@ void	make_enter_file_exec_pipeline(t_cmd *cmd, int *prev_fd)
 		if (in_fd == -1)
 		{
 			perror(cmd->infile);
+			cmd->link->cmds = cmd;
+			free_link_struct(*cmd->link);
 			exit(1);
 		}
 		dup2(in_fd, STDIN_FILENO);

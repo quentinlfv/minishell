@@ -39,25 +39,6 @@ static int	execute_if_valid(t_cmd *cmds, t_env **env, t_lexer *lexer,
 	return (1);
 }
 
-int	check_exit(t_cmd *cmds)
-{
-	t_cmd	*cmd;
-
-	cmd = cmds;
-	if (cmds->heredoc_delimiter)
-		return (0);
-	while (cmd)
-	{
-		if (!ft_strcmp(cmd->args[0], "exit"))
-		{
-			if (builtin_exit(cmds) != -100)
-				return (1);
-		}
-		cmd = cmd->next;
-	}
-	return (0);
-}
-
 static int	handle_command_line_utils(t_cmd *cmds, char *rl, t_lexer *head,
 		t_ast *head_ast)
 {
@@ -79,8 +60,21 @@ static int	handle_command_line_utils(t_cmd *cmds, char *rl, t_lexer *head,
 	return (0);
 }
 
-int	handle_command_line(char *rl, t_lexer *lexer, t_env **env,
-		int *if_p)
+void	link_all_struct(t_cmd *cmds, t_ast *ast, t_lexer *lexer, t_env **env)
+{
+	t_cmd	*tmp;
+	t_link	link;
+
+	link = init_link_struct(cmds, lexer, ast, env);
+	tmp = cmds;
+	while (tmp)
+	{
+		tmp->link = &link;
+		tmp = tmp->next;
+	}
+}
+
+int	handle_command_line(char *rl, t_lexer *lexer, t_env **env, int *if_p)
 {
 	t_ast	*parsed;
 	t_cmd	*cmds;
@@ -92,13 +86,15 @@ int	handle_command_line(char *rl, t_lexer *lexer, t_env **env,
 	parsed = parse(&lexer);
 	head_ast = parsed;
 	cmds = ast_to_cmds(parsed);
-	if (!cmds)
-		return (free_lexer(head, 0), free_ast(parsed), free(rl), (0));
+	if (!cmds || (!cmds->args && !cmds->heredoc))
+		return (free_cmd(cmds), free_lexer(head, 0), free_ast(parsed), free(rl),
+			(0));
 	if (handle_command_line_utils(cmds, rl, head, head_ast))
 		return (free_env(env), exit(g_exit_status), 1);
+	link_all_struct(cmds, head_ast, head, env);
 	free_ast(parsed);
 	if (!prepare_heredoc(cmds, head, head_ast, env))
-		return (free_lexer(head, 0), free_cmd(cmds), free(rl), 0);
+		return (free(rl), 0);
 	execute_if_valid(cmds, env, head, if_p);
 	close_and_unlink_heredoc_fds(cmds);
 	free_cmd(cmds);
@@ -111,6 +107,8 @@ int	main(int argc, char **argv, char **env)
 	t_env	*env_result;
 	int		if_first_pipe_command;
 
+	if (!isatty(STDIN_FILENO))
+		exit(2);
 	g_exit_status = 0;
 	if_first_pipe_command = 1;
 	if (!argc || !argv)

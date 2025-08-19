@@ -28,6 +28,7 @@ static t_cmd	*new_cmd(void)
 	cmd->heredoc_delimiter = NULL;
 	cmd->next = NULL;
 	cmd->previous = NULL;
+	cmd->link = NULL;
 	return (cmd);
 }
 

@@ -72,7 +72,7 @@ t_ast	*handle_redirect(t_lexer **lexer, t_ast *cmd)
 	if (!*lexer || (*lexer)->token != WORD)
 	{
 		fprintf(stderr, "Syntax error: expected filename\n");
-		return (NULL);
+		return (free_ast(cmd), NULL);
 	}
 	redir = malloc(sizeof(t_ast));
 	if (!redir)

@@ -14,19 +14,11 @@
 
 void	make_heredoc_in_out_file(t_cmd *cmd, t_sig *sig)
 {
-	// int	heredoc_fd;
-
 	if (cmd->heredoc)
 	{
-		// heredoc_fd = create_heredoc_pipe(cmd->heredoc_delimiter);
-		// if (heredoc_fd == -1)
-		// {
-		// 	exit(EXIT_FAILURE);
-		// }
 		if (cmd->args)
 			dup2(cmd->heredoc_fd, STDIN_FILENO);
-		// close(cmd->heredoc_fd);
-		// cmd->heredoc_fd = 0;
+		close(cmd->heredoc_fd);
 	}
 	else if (cmd->infile)
 	{
@@ -34,6 +26,8 @@ void	make_heredoc_in_out_file(t_cmd *cmd, t_sig *sig)
 		if (sig->sigint == -1)
 		{
 			printf("ERROR : FILE\n");
+			cmd->link->cmds = cmd;
+			free_link_struct(*cmd->link);
 			exit(EXIT_FAILURE);
 		}
 		dup2(sig->sigint, STDIN_FILENO);

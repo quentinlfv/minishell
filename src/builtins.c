@@ -48,7 +48,9 @@ int	builtin_cd(char **args, t_env **env)
 		write(2, "cd: ", 4);
 		perror(target_dir);
 	}
-	return (free(home_dir), 1);
+	if (!args[1])
+		free(target_dir);
+	return (1);
 }
 
 static char	*extract_key(char *arg)

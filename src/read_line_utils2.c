@@ -11,3 +11,22 @@
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+int	check_exit(t_cmd *cmds)
+{
+	t_cmd	*cmd;
+
+	cmd = cmds;
+	if (cmds->heredoc_delimiter)
+		return (0);
+	while (cmd)
+	{
+		if (!ft_strcmp(cmd->args[0], "exit"))
+		{
+			if (builtin_exit(cmds) != -100)
+				return (1);
+		}
+		cmd = cmd->next;
+	}
+	return (0);
+}

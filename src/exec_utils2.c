@@ -15,22 +15,6 @@
 static int	make_scan_and_single_builtin_execute_pipeline(t_cmd *cmds,
 		t_env **env, t_sig *sig)
 {
-	// t_cmd	*scan;
-
-	// scan = cmds;
-	// while (scan)
-	// {
-	// 	if (scan->heredoc)
-	// 	{
-	// 		scan->heredoc_fd = create_heredoc_pipe(scan->heredoc_delimiter);
-	// 		if (scan->heredoc_fd == -1)
-	// 		{
-	// 			perror("heredoc");
-	// 			return (1);
-	// 		}
-	// 	}
-	// 	scan = scan->next;
-	// }
 	if (!cmds->next && if_is_builtin(cmds))
 	{
 		make_heredoc_in_out_file(cmds, sig);

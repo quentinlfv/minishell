@@ -63,13 +63,14 @@ int	convert_l_env_to_char_env_utils(t_env **env, char **result, int *count)
 	result[*count][size_y] = '=';
 	while ((*env)->current_value[++(count2)] && ++size_y > 0)
 		result[*count][(size_y)] = (*env)->current_value[(count2)];
-	(*env) = (*env)->next;
 	(*count)++;
+		(*env) = (*env)->next;
 	return (1);
 }
 
 char	**convert_l_env_to_char_env(t_env **env)
 {
+	t_env	*tmp;
 	char	**result;
 	int		size_y;
 	int		count;
@@ -78,21 +79,14 @@ char	**convert_l_env_to_char_env(t_env **env)
 	count = 0;
 	while ((*env)->previous != NULL)
 		(*env) = (*env)->previous;
-	while ((*env)->next != NULL)
-	{
-		(*env) = (*env)->next;
-		size_y++;
-	}
-	while ((*env)->previous != NULL)
-		(*env) = (*env)->previous;
+	size_y = get_size_env(env);
 	result = malloc(sizeof(char *) * (size_y + 1));
 	if (!result)
 		return (NULL);
 	result[size_y] = NULL;
-	while ((*env)->next != NULL)
-		convert_l_env_to_char_env_utils(env, result, &count);
-	while ((*env)->previous != NULL)
-		(*env) = (*env)->previous;
+	tmp = *env;
+	while (tmp)
+		convert_l_env_to_char_env_utils(&tmp, result, &count);
 	return (result);
 }
 
